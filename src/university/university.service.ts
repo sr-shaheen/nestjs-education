@@ -17,4 +17,40 @@ export class UniversityService {
     const newUniversity = await new this.universityModel(createUniversityDTO);
     return newUniversity.save();
   }
+  async searchUniversity(body: any): Promise<any> {
+    const regexp = new RegExp(`^.*${body.name}.*`, 'gmi');
+
+    const data = await this.universityModel.aggregate([
+      {
+        $match: {
+          $and: [
+            {
+              $or: [{ name: regexp }],
+            },
+            {
+              isDeleted: false,
+            },
+          ],
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          id: '$_id',
+          name: 1,
+        },
+      },
+      {
+        $limit: 10,
+      },
+    ]);
+
+    return data;
+  }
 }

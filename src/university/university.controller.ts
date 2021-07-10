@@ -7,10 +7,16 @@ export class UniversityController {
   constructor(private uiversityService: UniversityService) {}
 
   @Post('/create')
-  async addRecipe(@Body() createUniversityDTO: CreateUniversityDTO) {
+  async addUniversity(@Body() createUniversityDTO: CreateUniversityDTO) {
     const recipe = await this.uiversityService.addUniversity(
       createUniversityDTO,
     );
     return recipe;
+  }
+
+  @Post('/search')
+  async getUniversitySearch(@Body() bodyData: any) {
+    const data = await this.uiversityService.searchUniversity(bodyData);
+    return data;
   }
 }

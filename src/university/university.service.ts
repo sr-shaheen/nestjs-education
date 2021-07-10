@@ -14,62 +14,74 @@ export class UniversityService {
   async addUniversity(
     createUniversityDTO: CreateUniversityDTO,
   ): Promise<University> {
-    const newUniversity = await new this.universityModel(createUniversityDTO);
-    return newUniversity.save();
+    try {
+      const newUniversity = await new this.universityModel(createUniversityDTO);
+      return newUniversity.save();
+    } catch (error) {
+      return;
+    }
   }
   async searchUniversity(body: any): Promise<any> {
-    const regexp = new RegExp(`^.*${body.name}.*`, 'gmi');
+    try {
+      const regexp = new RegExp(`^.*${body.name}.*`, 'gmi');
 
-    const data = await this.universityModel.aggregate([
-      {
-        $match: {
-          $and: [
-            {
-              $or: [{ name: regexp }],
-            },
-            {
-              isDeleted: false,
-            },
-          ],
+      const data = await this.universityModel.aggregate([
+        {
+          $match: {
+            $and: [
+              {
+                $or: [{ name: regexp }],
+              },
+              {
+                isDeleted: false,
+              },
+            ],
+          },
         },
-      },
-      {
-        $project: {
-          _id: 1,
-          name: 1,
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+          },
         },
-      },
-      {
-        $project: {
-          _id: 0,
-          id: '$_id',
-          name: 1,
+        {
+          $project: {
+            _id: 0,
+            id: '$_id',
+            name: 1,
+          },
         },
-      },
-      {
-        $limit: 10,
-      },
-    ]);
+        {
+          $limit: 10,
+        },
+      ]);
 
-    return { isExecuted: true, data };
+      return { isExecuted: true, data };
+    } catch (error) {
+      return { isExecuted: false, message: error.message };
+    }
   }
 
   async getUniversityDepartment(universityId: string): Promise<any> {
-    const data = await this.universityModel.aggregate([
-      {
-        $match: {
-          _id: Types.ObjectId(universityId),
-          isDeleted: false,
+    try {
+      const data = await this.universityModel.aggregate([
+        {
+          $match: {
+            _id: Types.ObjectId(universityId),
+            isDeleted: false,
+          },
         },
-      },
-      {
-        $project: {
-          _id: 0,
-          name: '$name',
-          department: '$department',
+        {
+          $project: {
+            _id: 0,
+            name: '$name',
+            department: '$department',
+          },
         },
-      },
-    ]);
-    return { isExecuted: true, data: data[0] };
+      ]);
+      return { isExecuted: true, data: data[0] };
+    } catch (error) {
+      return { isExecuted: true, message: error.message };
+    }
   }
 }

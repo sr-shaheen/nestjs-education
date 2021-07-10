@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Param, Controller, Post, Get } from '@nestjs/common';
 import { CreateUniversityDTO } from './create-university.dto';
 import { UniversityService } from './university.service';
 
@@ -17,6 +17,11 @@ export class UniversityController {
   @Post('/search')
   async getUniversitySearch(@Body() bodyData: any) {
     const data = await this.uiversityService.searchUniversity(bodyData);
+    return data;
+  }
+  @Get('/:id')
+  async getUniversityById(@Param('id') id: string) {
+    const data = await this.uiversityService.getUniversityDepartment(id);
     return data;
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CreateUniversityDTO } from './create-university.dto';
 import { University } from './university.model';
 
@@ -51,6 +51,25 @@ export class UniversityService {
       },
     ]);
 
-    return data;
+    return { isExecuted: true, data };
+  }
+
+  async getUniversityDepartment(universityId: string): Promise<any> {
+    const data = await this.universityModel.aggregate([
+      {
+        $match: {
+          _id: Types.ObjectId(universityId),
+          isDeleted: false,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          name: '$name',
+          department: '$department',
+        },
+      },
+    ]);
+    return { isExecuted: true, data: data[0] };
   }
 }

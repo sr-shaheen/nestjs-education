@@ -16,7 +16,7 @@ export class UniversityService {
   ): Promise<University> {
     try {
       const newUniversity = await new this.universityModel(createUniversityDTO);
-      return newUniversity.save();
+      return await newUniversity.save();
     } catch (error) {
       return;
     }

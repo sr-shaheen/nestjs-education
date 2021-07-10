@@ -14,7 +14,7 @@ export class CoursesService {
   async addCourse(createCourseDTO: CreateCourseDTO): Promise<Course> {
     try {
       const newCourse = await new this.courseModel(createCourseDTO);
-      return newCourse.save();
+      return await newCourse.save();
     } catch (error) {
       return;
     }

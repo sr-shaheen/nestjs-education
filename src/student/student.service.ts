@@ -14,7 +14,7 @@ export class StudentService {
   async addStudent(createStudentDTO: CreateStudentDTO): Promise<Student> {
     try {
       const newUniversity = await new this.studentModel(createStudentDTO);
-      return newUniversity.save();
+      return await newUniversity.save();
     } catch (error) {
       return;
     }

@@ -50,4 +50,29 @@ export class StudentService {
 
     return { isExecuted: true, data };
   }
+  async getAllStudent(): Promise<any> {
+    const data = await this.studentModel.aggregate([
+      {
+        $match: {
+          isDisabled: false,
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          cell: 1,
+          address: 1,
+          sex: 1,
+          universityName: 1,
+          departmentName: 1,
+        },
+      },
+      {
+        $limit: 10,
+      },
+    ]);
+
+    return { isExecuted: true, data };
+  }
 }

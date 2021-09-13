@@ -9,7 +9,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 @Module({
   imports: [
     MongooseModule.forRoot(
-      'mongodb+srv://shaheen:shaheen123@practice.6n21r.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+      'mongodb+srv://auth:auth@123@practice.6n21r.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,
